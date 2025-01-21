@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
 
 @Component({
   selector: 'app-root',
