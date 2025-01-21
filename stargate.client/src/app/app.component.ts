@@ -46,7 +46,6 @@ export class AppComponent {
 
     this.http.get<ApiResponse>(apiUrl).subscribe({
       next: (response) => {
-        console.log(response);
         this.loading = false;
         if (response.success) {
           if (response['person'] === null) {
@@ -55,13 +54,13 @@ export class AppComponent {
             this.message = 'Successfully found user ' + searchValue;
             this.person = response['person'];
             this.personDuties = response['astronautDuties'];
-            console.log(this.personDuties);
           }
         } else {
           this.errorMessage = response.message;
         }
       },
       error: (error) => {
+        // this sometimes eats stuff I would rather it not so setup in the interface "OK for endpoint"
         this.loading = false;
         console.error('Error: ', error);
         this.errorMessage = error.statusText;
