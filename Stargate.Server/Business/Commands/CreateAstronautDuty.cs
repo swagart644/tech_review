@@ -154,6 +154,8 @@ namespace Stargate.Server.Business.Commands
 
         public virtual async Task<(Person? person, AstronautDetail? astronautDetail)> GetPersonInfo(CreateAstronautDuty request)
         {
+            // sql inject worries? 
+            //Person? person = await _context.People.FirstOrDefaultAsync(x => x.Name == request.Name); // maybe? 
             Person? person = await _context.People.FromSql($"SELECT * FROM [Person] WHERE {request.Name} = Name").FirstOrDefaultAsync();
 
             AstronautDetail? astronautDetail = await _context.AstronautDetails.FromSql($"SELECT * FROM [AstronautDetail] WHERE {person?.Id ?? -1} = PersonId").FirstOrDefaultAsync();

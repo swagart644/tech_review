@@ -4,8 +4,51 @@
 <div class="body-container">
   <div class="container">
     <div class="card">
-
+      <div id="inputs" class="input-row" style="width: 100%;">
+        <input class="input-bar" type="text" placeholder="Enter person name here" #nameInput (keydown.enter)="search(nameInput)" />
+        <button class="btn" type="submit" (click)="search(nameInput)" style="float: right;">Search For Person</button>
+      </div>
+    </div>
+    <div id="messageContainer" class="message-container" *ngIf="message.length > 0">
+      <h2>{{message}}</h2>
+    </div>
+    <div id="errorContainer" class="error-container" *ngIf="errorMessage.length > 0">
+      <h2>{{errorMessage}}</h2>
+    </div>
+    <div *ngIf="loading" style="position: relative; width: 100%; margin-top: 105px;">
+      <div class="loader-div">
+        <h3 style="position: absolute; top: 67px; left: 60px; color: #dd2476; text-shadow: 0 0 8px rgba(252, 103, 103, 0.6);">Loading...</h3>
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <filter id="shadow">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#fc6767" />
+            </filter>
+          </defs>
+          <circle id="spinner" style="fill:transparent;stroke:#dd2476;stroke-width: 7px;stroke-linecap: round;filter:url(#shadow);" cx="50" cy="50" r="45" />
+        </svg>
+      </div>
+    </div>
+    <div *ngIf="person && !loading">
+      <div id="personbox" class="card">
+        <div class="person-info">
+          <div><span style="font-weight:bold;">Name:</span> {{person.name}}</div>
+          <div *ngIf="person.currentRank"><span style="font-weight:bold;">Current Rank:</span> {{person.currentRank}}</div>
+          <div *ngIf="person.currentDutyTitle"><span style="font-weight:bold;">Current Duty Title:</span> {{person.currentDutyTitle}}</div>
+          <div *ngIf="person.careerStartDate"><span style="font-weight:bold;">Carrer Start:</span> {{person.careerStartDate}}</div>
+          <div *ngIf="person.careerEndDate"><span style="font-weight:bold;">Carrer End:</span> {{person.careerEndDate}}</div>
+          <h3>Duties:</h3>
+          <div class="duty-row">
+            <div class="duty-container" *ngFor="let duty of personDuties">
+              <div style="padding: 4px 4px 4px 4px;">
+                <div class="duty-item"><span>Title: {{duty.dutyTitle}}</span></div>
+                <div class="duty-item"><span>Rank: {{duty.rank}}</span></div>
+                <div class="duty-item"><span>Start: {{duty.dutyStartDate | date:'M/d/yyyy h:mm'}}</span></div>
+                <div class="duty-item"><span>End: {{duty.dutyEndDate | date:'M/d/yyyy h:mm'}}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-

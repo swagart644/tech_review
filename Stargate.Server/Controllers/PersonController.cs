@@ -16,7 +16,7 @@ namespace Stargate.Server.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetPeople")]
+        [HttpGet("")]
         public async Task<IActionResult> GetPeople()
         {
             try
