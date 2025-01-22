@@ -25,6 +25,7 @@ namespace Stargate.Server.Business.Queries
 
         public async Task<GetAstronautDutiesByNameResult> Handle(GetAstronautDutiesByName request, CancellationToken cancellationToken)
         {
+            request.Name = request.Name.Trim();
             var result = new GetAstronautDutiesByNameResult();
             PersonAstronaut? person = await GetPersonAstronaut(request);
 

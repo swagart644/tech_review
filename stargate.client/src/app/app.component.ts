@@ -4,7 +4,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: [ './app.component.css' ]
 })
 export class AppComponent {
   message: string = '';
@@ -26,20 +26,22 @@ export class AppComponent {
   }
 
   public search(input: HTMLInputElement): void {
-    this.person = null;
-    this.personDuties = null;
-    this.loading = true;
+    const searchValue = input.value.trim();
+    input.value = '';
 
-    this.clearMessages();
-
-    if (input.value.length == 0) {
+    if (searchValue.length == 0) {
       this.errorMessage = 'Can not search for blank names. Please enter name and try again.';
-      this.loading = false;
       return;
     }
 
-    const searchValue = input.value;
-    input.value = '';
+    if (searchValue === (this.person?.name ?? '')) {
+      console.log('Stopped repeat search for: ' + searchValue);
+      return;
+    }
+
+    this.clearPeople();
+    this.loading = true;
+    
     const apiUrl = '/astronautduty/' + searchValue;
 
     this.http.get<ApiResponse>(apiUrl).subscribe({
@@ -58,10 +60,13 @@ export class AppComponent {
         }
       },
       error: (error) => {
-        // this sometimes eats stuff I would rather it not so setup in the interface "OK for endpoint"
-        this.loading = false;
         console.error('Error: ', error);
-        this.errorMessage = error.statusText;
+        if (error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = error.statusText;
+        }
+        this.loading = false;
       }
     });
   }

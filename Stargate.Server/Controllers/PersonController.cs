@@ -62,7 +62,7 @@ namespace Stargate.Server.Controllers
             }
         }
 
-        [HttpPost("{name}")]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreatePerson([FromBody] string name)
         {
             try

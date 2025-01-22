@@ -33,6 +33,7 @@ namespace Stargate.Server.Business.Commands
 
         public Task Process(CreateAstronautDuty request, CancellationToken cancellationToken)
         {
+            request.Name = request.Name.Trim();
             Person? person = GetPerson(request);
 
             if (person is null)
