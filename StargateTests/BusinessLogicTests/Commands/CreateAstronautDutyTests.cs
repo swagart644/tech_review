@@ -127,7 +127,7 @@ namespace StargateTests.BusinessLogicTests.Commands
 
 
             _handler.Setup(x => x.GetPersonInfo(It.IsAny<CreateAstronautDuty>())).ReturnsAsync(response);
-            _handler.Setup(x => x.GetAstronautDuties(It.IsAny<Person?>())).ReturnsAsync(new AstronautDuty()
+            _handler.Setup(x => x.GetAstronautDuties(It.IsAny<Person?>())).ReturnsAsync(new List<AstronautDuty>()
             {
             });
 
@@ -159,7 +159,7 @@ namespace StargateTests.BusinessLogicTests.Commands
             }, null);
 
             _handler.Setup(x => x.GetPersonInfo(It.IsAny<CreateAstronautDuty>())).ReturnsAsync(response);
-            _handler.Setup(x => x.GetAstronautDuties(It.IsAny<Person?>())).ReturnsAsync(new AstronautDuty()
+            _handler.Setup(x => x.GetAstronautDuties(It.IsAny<Person?>())).ReturnsAsync(new List<AstronautDuty>()
             {
             });
 

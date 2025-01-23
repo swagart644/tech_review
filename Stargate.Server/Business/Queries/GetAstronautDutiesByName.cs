@@ -49,12 +49,12 @@ namespace Stargate.Server.Business.Queries
 
         public virtual async Task<List<AstronautDuty>?> GetAstronautDuties(PersonAstronaut person)
         {
-            return await _context.AstronautDuties.FromSql($"SELECT * FROM [AstronautDuty] WHERE {person.PersonId} = PersonId Order By DutyStartDate Desc").ToListAsync();
+            return await _context.AstronautDuties.FromSqlInterpolated($"SELECT * FROM [AstronautDuty] WHERE {person.PersonId} = PersonId Order By DutyStartDate Desc").ToListAsync();
         }
 
         public virtual async Task<PersonAstronaut?> GetPersonAstronaut(GetAstronautDutiesByName request)
         {
-            return await _context.PersonAstronauts.FromSql($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id WHERE {request.Name} = a.Name").FirstOrDefaultAsync();
+            return await _context.PersonAstronauts.FromSqlInterpolated($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id WHERE {request.Name} = a.Name").FirstOrDefaultAsync();
         }
     }
 

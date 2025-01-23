@@ -111,12 +111,15 @@ namespace Stargate.Server.Business.Commands
                     await SaveDetails(astronautDetail);
                 }
 
-                AstronautDuty? astronautDuty = await GetAstronautDuties(person);
+                List<AstronautDuty>? unendedDuties = await GetAstronautDuties(person);
 
-                if (astronautDuty != null)
+                if (unendedDuties != null) 
                 {
-                    astronautDuty.DutyEndDate = request.DutyStartDate.AddDays(-1).Date;
-                    await UpdateAstronautDuties(astronautDuty);
+                    foreach (AstronautDuty unendedDuty in unendedDuties)
+                    {
+                        unendedDuty.DutyEndDate = request.DutyStartDate.AddDays(-1).Date;
+                        await UpdateAstronautDuties(unendedDuty);
+                    }
                 }
 
                 var newAstronautDuty = new AstronautDuty()
@@ -148,18 +151,16 @@ namespace Stargate.Server.Business.Commands
             }
         }
         #region EntityRetrieve
-        public virtual async Task<AstronautDuty?> GetAstronautDuties(Person? person)
+        public virtual async Task<List<AstronautDuty>?> GetAstronautDuties(Person? person)
         {
-            return await _context.AstronautDuties.FromSql($"SELECT * FROM [AstronautDuty] WHERE {person?.Id ?? -1} = PersonId Order By DutyStartDate Desc").FirstOrDefaultAsync();
+            return await _context.AstronautDuties.FromSqlInterpolated($"SELECT * FROM [AstronautDuty] WHERE {person?.Id ?? -1} = PersonId AND DutyEndDate IS NULL").ToListAsync();
         }
 
         public virtual async Task<(Person? person, AstronautDetail? astronautDetail)> GetPersonInfo(CreateAstronautDuty request)
         {
-            // sql inject worries? 
-            //Person? person = await _context.People.FirstOrDefaultAsync(x => x.Name == request.Name); // maybe? 
-            Person? person = await _context.People.FromSql($"SELECT * FROM [Person] WHERE {request.Name} = Name").FirstOrDefaultAsync();
+            Person? person = await _context.People.FirstOrDefaultAsync(x => x.Name == request.Name);
 
-            AstronautDetail? astronautDetail = await _context.AstronautDetails.FromSql($"SELECT * FROM [AstronautDetail] WHERE {person?.Id ?? -1} = PersonId").FirstOrDefaultAsync();
+            AstronautDetail? astronautDetail = await _context.AstronautDetails.FromSqlInterpolated($"SELECT * FROM [AstronautDetail] WHERE {person?.Id ?? -1} = PersonId").FirstOrDefaultAsync();
 
             return (person, astronautDetail);
         }
